@@ -61,6 +61,7 @@ class App extends React.Component {
         this.login = this.login.bind(this);
         this.sendSlide = this.sendSlide.bind(this);
         this.receiveMessages = this.receiveMessages.bind(this);
+        this.sendRate = this.sendRate.bind(this);
     }
 
     componentDidMount() {
@@ -144,6 +145,20 @@ class App extends React.Component {
                     direction: message.direction
                 });
                 break;
+            case 'VOTE':
+                this.setState(prevState => {
+                    prevState.presentationVotes.push({
+                        name: message.mood_name,
+                        value: message.value,
+                        date: new Date()
+                    });
+                    prevState.slide_moods[message.value].count++;
+                    return {
+                        presentationVotes: prevState.presentationVotes,
+                        slide_moods: prevState.slide_moods
+                    }
+                });
+                break;
         }
     }
 
@@ -152,6 +167,14 @@ class App extends React.Component {
             type: 'SLIDE',
             index: index,
             direction: direction
+        })
+    }
+
+    sendRate(mood_name, value) {
+        this.sendMessage({
+            type: 'VOTE',
+            mood_name: mood_name,
+            value: value
         })
     }
 
@@ -169,8 +192,8 @@ class App extends React.Component {
                     <Slider isPresenter={this.state.isPresenter}
                         slides={this.state.slides}
                         style={this.state.playerStyle}
-                        onToggle={this.togglePlayerComments} 
-                        onSlide={this.sendSlide} 
+                        onToggle={this.togglePlayerComments}
+                        onSlide={this.sendSlide}
                         index={this.state.index}
                         direction={this.state.direction} />
                     <Comments isPresenter={this.state.isPresenter}
@@ -185,7 +208,8 @@ class App extends React.Component {
                         commentBoxStyle={this.state.commentBoxStyle}
                         rateBoxStyle={this.state.rateBoxStyle}
                         onToggleCommentBox={this.toggleCommentBox}
-                        presentationVotes={this.state.presentationVotes} />
+                        presentationVotes={this.state.presentationVotes} 
+                        onRate={this.sendRate}/>
                 </Row>
             </div>
         );
