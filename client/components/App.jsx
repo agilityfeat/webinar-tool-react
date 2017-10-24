@@ -40,7 +40,7 @@ class App extends React.Component {
             ],
             comments: [],
             presentationVotes: [],
-            isPresenter: true,
+            isPresenter: false,
             playerStyle: null,
             commentsStyle: null,
             commentBoxStyle: null,
