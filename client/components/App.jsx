@@ -22,6 +22,12 @@ import { visible, hidden } from './styles/styles';
 
 const pathToImages = require.context('../images/', true);
 
+const credentials = {
+    publish_key: 'your pub keys here',
+    subscribe_key: 'your sub keys here'
+}
+const mainChannel = 'realtime-app';
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -54,6 +60,14 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        this.PubNub = PUBNUB.init({
+            publish_key: credentials.publish_key,
+            subscribe_key: credentials.subscribe_key
+        });
+        this.PubNub.subscribe({
+            channel: mainChannel,
+            message: this.receiveMessages
+        });
         window.addEventListener('resize', this.removeStyles);
     }
 
@@ -102,6 +116,13 @@ class App extends React.Component {
                 }
             }
         })
+    }
+
+    sendMessage(message) {
+        this.PubNub.publish({
+            channel: mainChannel,
+            message: message
+        });
     }
 
     login() {
