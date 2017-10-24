@@ -40,7 +40,7 @@ class App extends React.Component {
             ],
             comments: [],
             presentationVotes: [],
-            isPresenter: false,
+            isPresenter: true,
             playerStyle: null,
             commentsStyle: null,
             commentBoxStyle: null,
@@ -124,7 +124,8 @@ class App extends React.Component {
                         slide_moods={this.state.slide_moods}
                         commentBoxStyle={this.state.commentBoxStyle}
                         rateBoxStyle={this.state.rateBoxStyle}
-                        onToggleCommentBox={this.toggleCommentBox} />
+                        onToggleCommentBox={this.toggleCommentBox} 
+                        presentationVotes={this.state.presentationVotes}/>
                 </Row>
             </div>
         );
