@@ -63,6 +63,7 @@ class App extends React.Component {
         this.receiveMessages = this.receiveMessages.bind(this);
         this.sendRate = this.sendRate.bind(this);
         this.sendComment = this.sendComment.bind(this);
+        this.sendDeleteComment = this.sendDeleteComment.bind(this);
     }
 
     componentDidMount() {
@@ -172,6 +173,14 @@ class App extends React.Component {
                     }
                 });
                 break;
+            case 'DELETE':
+                this.setState(prevState => {
+                    prevState.comments.splice(message.index, 1);
+                    return {
+                        comments: prevState.comments
+                    }
+                });
+                break;
         }
     }
 
@@ -199,6 +208,13 @@ class App extends React.Component {
         })
     }
 
+    sendDeleteComment(index) {
+        this.sendMessage({
+            type: 'DELETE',
+            index: index
+        });
+    }
+
     //the render method
     render() {
         //we return JSX syntax. Plain Javascript code is between { }
@@ -220,7 +236,8 @@ class App extends React.Component {
                     <Comments isPresenter={this.state.isPresenter}
                         style={this.state.commentsStyle}
                         onToggle={this.togglePlayerComments}
-                        comments={this.state.comments} />
+                        comments={this.state.comments} 
+                        onDeleteComment={this.sendDeleteComment} />
                 </Row>
 
                 <Row>
