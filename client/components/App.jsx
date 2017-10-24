@@ -39,6 +39,7 @@ class App extends React.Component {
                 { pic_url: "./03.png" }
             ],
             comments: [],
+            presentationVotes: [],
             isPresenter: false,
             playerStyle: null,
             commentsStyle: null,
@@ -50,7 +51,7 @@ class App extends React.Component {
         this.togglePlayerComments = this.togglePlayerComments.bind(this);
         this.toggleCommentBox = this.toggleCommentBox.bind(this);
     }
-    
+
     componentDidMount() {
         window.addEventListener('resize', this.removeStyles);
     }
@@ -114,7 +115,7 @@ class App extends React.Component {
                         onToggle={this.togglePlayerComments} />
                     <Comments isPresenter={this.state.isPresenter}
                         style={this.state.commentsStyle}
-                        onToggle={this.togglePlayerComments} 
+                        onToggle={this.togglePlayerComments}
                         comments={this.state.comments} />
                 </Row>
 
