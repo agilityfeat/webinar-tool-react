@@ -50,13 +50,17 @@ class App extends React.Component {
             playerStyle: null,
             commentsStyle: null,
             commentBoxStyle: null,
-            rateBoxStyle: null
+            rateBoxStyle: null,
+            index: 0,
+            direction: null,
         }
         //bindings
         this.removeStyles = this.removeStyles.bind(this);
         this.togglePlayerComments = this.togglePlayerComments.bind(this);
         this.toggleCommentBox = this.toggleCommentBox.bind(this);
         this.login = this.login.bind(this);
+        this.sendSlide = this.sendSlide.bind(this);
+        this.receiveMessages = this.receiveMessages.bind(this);
     }
 
     componentDidMount() {
@@ -131,6 +135,26 @@ class App extends React.Component {
         }));
     }
 
+    receiveMessages(message) {
+        console.log('received:', message);
+        switch (message.type) {
+            case 'SLIDE':
+                this.setState({
+                    index: message.index,
+                    direction: message.direction
+                });
+                break;
+        }
+    }
+
+    sendSlide(index, direction) {
+        this.sendMessage({
+            type: 'SLIDE',
+            index: index,
+            direction: direction
+        })
+    }
+
     //the render method
     render() {
         //we return JSX syntax. Plain Javascript code is between { }
@@ -145,7 +169,10 @@ class App extends React.Component {
                     <Slider isPresenter={this.state.isPresenter}
                         slides={this.state.slides}
                         style={this.state.playerStyle}
-                        onToggle={this.togglePlayerComments} />
+                        onToggle={this.togglePlayerComments} 
+                        onSlide={this.sendSlide} 
+                        index={this.state.index}
+                        direction={this.state.direction} />
                     <Comments isPresenter={this.state.isPresenter}
                         style={this.state.commentsStyle}
                         onToggle={this.togglePlayerComments}
