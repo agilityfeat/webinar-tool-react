@@ -62,6 +62,7 @@ class App extends React.Component {
         this.sendSlide = this.sendSlide.bind(this);
         this.receiveMessages = this.receiveMessages.bind(this);
         this.sendRate = this.sendRate.bind(this);
+        this.sendComment = this.sendComment.bind(this);
     }
 
     componentDidMount() {
@@ -159,6 +160,18 @@ class App extends React.Component {
                     }
                 });
                 break;
+            case 'COMMENT':
+                this.setState((prevState) => {
+                    prevState.comments.push({
+                        text: message.comment,
+                        user: message.user,
+                        can_webrtc: navigator.mediaDevices.getUserMedia ? true : false
+                    });
+                    return {
+                        comments: prevState.comments
+                    }
+                });
+                break;
         }
     }
 
@@ -175,6 +188,14 @@ class App extends React.Component {
             type: 'VOTE',
             mood_name: mood_name,
             value: value
+        })
+    }
+
+    sendComment(text, user, can_webrtc) {
+        this.sendMessage({
+            type: 'COMMENT',
+            comment: text,
+            user: 0
         })
     }
 
@@ -208,8 +229,9 @@ class App extends React.Component {
                         commentBoxStyle={this.state.commentBoxStyle}
                         rateBoxStyle={this.state.rateBoxStyle}
                         onToggleCommentBox={this.toggleCommentBox}
-                        presentationVotes={this.state.presentationVotes} 
-                        onRate={this.sendRate}/>
+                        presentationVotes={this.state.presentationVotes}
+                        onRate={this.sendRate} 
+                        onAddComment={this.sendComment} />
                 </Row>
             </div>
         );
