@@ -50,6 +50,7 @@ class App extends React.Component {
         this.removeStyles = this.removeStyles.bind(this);
         this.togglePlayerComments = this.togglePlayerComments.bind(this);
         this.toggleCommentBox = this.toggleCommentBox.bind(this);
+        this.login = this.login.bind(this);
     }
 
     componentDidMount() {
@@ -103,11 +104,22 @@ class App extends React.Component {
         })
     }
 
+    login() {
+        this.setState((prevState) => ({
+            isPresenter: !prevState.isPresenter
+        }));
+    }
+
     //the render method
     render() {
         //we return JSX syntax. Plain Javascript code is between { }
         return (
             <div>
+                <Row className="top-container">
+                    <Col sm={12} className="loginBar">
+                        <button className="btn btn-login" onClick={this.login}>{this.state.isPresenter ? 'Logout' : 'Login'}</button>
+                    </Col>
+                </Row>
                 <Row className="top-container">
                     <Slider isPresenter={this.state.isPresenter}
                         slides={this.state.slides}
@@ -124,8 +136,8 @@ class App extends React.Component {
                         slide_moods={this.state.slide_moods}
                         commentBoxStyle={this.state.commentBoxStyle}
                         rateBoxStyle={this.state.rateBoxStyle}
-                        onToggleCommentBox={this.toggleCommentBox} 
-                        presentationVotes={this.state.presentationVotes}/>
+                        onToggleCommentBox={this.toggleCommentBox}
+                        presentationVotes={this.state.presentationVotes} />
                 </Row>
             </div>
         );
