@@ -102,15 +102,19 @@ class App extends React.Component {
                     session.video.height = this.localvideo.height;
                     this.localvideo.className = 'me';
 
-                    this.toggleModal('conference');
-                    if (this.state.isPresenter) this.toggleModal('calling');
+                    this.showModal('conference');
+                    if (this.state.isPresenter) this.hideModal('calling');
 
                     this.video.appendChild(this.localvideo);
-                    this.video.appendChild(session.video);
+                    if(!this.remoteVideo) {
+                        this.remoteVideo = session.video
+                        this.video.appendChild(this.remoteVideo)
+                    }
                 });
                 session.ended(session => {
                     console.log('Session: ENDED');
-                    this.toggleModal('conference');
+                    this.remoteVideo = null
+                    this.hideModal('conference');
                 })
             });
         }
@@ -255,20 +259,30 @@ class App extends React.Component {
         });
     }
 
-    toggleModal(modal) {
+    hideModal(modal) {
         switch (modal) {
             case 'calling':
-                this.setState({ showCallingModal: !this.state.showCallingModal });
+                this.setState({ showCallingModal: false });
                 break;
             case 'conference':
-                this.setState({ showConferenceModal: !this.state.showConferenceModal });
+                this.setState({ showConferenceModal: false });
+                break;
+        }
+    }
+    showModal(modal) {
+        switch (modal) {
+            case 'calling':
+                this.setState({ showCallingModal: true });
+                break;
+            case 'conference':
+                this.setState({ showConferenceModal: true });
                 break;
         }
     }
 
     callUser(number) {
         console.log('calling ' + number + '...')
-        this.toggleModal('calling');
+        this.showModal('calling');
         let session = this.phone.dial(number);
     }
 
@@ -313,7 +327,7 @@ class App extends React.Component {
                         onAddComment={this.sendComment} />
                 </Row>
 
-                <Modal show={this.state.showCallingModal} onHide={() => this.toggleModal('calling')}>
+                <Modal show={this.state.showCallingModal} onHide={() => this.hideModal('calling')}>
                     <Modal.Header closeButton>
                         <Modal.Title><img src={pathToImages("./phone.svg", true)} className="shake" /> Outgoing Call</Modal.Title>
                     </Modal.Header>
@@ -321,7 +335,7 @@ class App extends React.Component {
                         <p className="calling">Calling (User)...</p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={() => this.toggleModal('calling')}>Cancel</Button>
+                        <Button onClick={() => this.hideModal('calling')}>Cancel</Button>
                     </Modal.Footer>
                 </Modal>
 
