@@ -4,7 +4,7 @@
     "description": "RealTimeWeb.co webinar tool",
     "main": "server.js",
     "dependencies": {
-        "bootstrap": "3.3.7",
+        "bootstrap": "3.4.1",
         "html-webpack-plugin": "2.30.1",
         "react": "16.0.0",
         "react-bootstrap": "0.31.3",
